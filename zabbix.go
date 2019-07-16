@@ -10,6 +10,7 @@ package jmx
 
 import (
 	"fmt"
+	"io"
 	"net"
 	"time"
 )
@@ -18,24 +19,30 @@ import (
 
 // Client is Zabbix JMX client
 type Client struct {
-	WriteTimeout time.Duration
-	ReadTimeout  time.Duration
+	ConnectTimeout time.Duration
+	WriteTimeout   time.Duration
+	ReadTimeout    time.Duration
 
-	addr *net.TCPAddr
+	dialer *net.Dialer
+	addr   *net.TCPAddr
 }
 
-// Request is basic request
+// Request is basic request struct
 type Request struct {
 	Server   string
 	Port     int
 	Username string
 	Password string
-	Endpoint string
 	Keys     []string
 }
 
 // Response contains response data
-type Response []map[string]string
+type Response []*ResponseData
+
+// ResponseData contains value for requested key
+type ResponseData struct {
+	Value string `json:"value"`
+}
 
 // ////////////////////////////////////////////////////////////////////////////////// //
 
@@ -51,6 +58,7 @@ type jmxRequest struct {
 
 type jmxResponse struct {
 	Data   Response `json:"data"`
+	Error  string   `json:"error"`
 	Status string   `json:"response"`
 }
 
@@ -64,7 +72,9 @@ func NewClient(address string) (*Client, error) {
 		return nil, err
 	}
 
-	return &Client{addr: addr}, nil
+	dialer := &net.Dialer{Timeout: time.Second * 5}
+
+	return &Client{addr: addr, dialer: dialer}, nil
 }
 
 // ////////////////////////////////////////////////////////////////////////////////// //
@@ -72,6 +82,7 @@ func NewClient(address string) (*Client, error) {
 // Get fetches data from Java Gateway
 func (c *Client) Get(r *Request) (Response, error) {
 	jr := convertRequest(r)
+
 	conn, err := connectToServer(c)
 
 	if err != nil {
@@ -127,24 +138,28 @@ func (c *Client) Get(r *Request) (Response, error) {
 func convertRequest(r *Request) *jmxRequest {
 	return &jmxRequest{
 		Request:  "java gateway jmx",
-		Conn:     fmt.Sprintf("service:jmx:rmi:///jndi/rmi://%s:%d/jmxrmi", r.Server, r.Port),
+		Conn:     r.Server,
 		Port:     r.Port,
 		Username: r.Username,
 		Password: r.Password,
-		Endpoint: r.Endpoint,
+		Endpoint: fmt.Sprintf("service:jmx:rmi:///jndi/rmi://%s:%d/jmxrmi", r.Server, r.Port),
 		Keys:     r.Keys,
 	}
 }
 
 // connectToServer makes connetion to Zabbix server
 func connectToServer(c *Client) (*net.TCPConn, error) {
-	conn, err := net.DialTCP(c.addr.Network(), nil, c.addr)
+	if c.ConnectTimeout > 0 && c.dialer.Timeout != c.ConnectTimeout {
+		c.dialer.Timeout = c.ConnectTimeout
+	}
+
+	conn, err := c.dialer.Dial(c.addr.Network(), c.addr.String())
 
 	if err != nil {
 		return nil, err
 	}
 
-	return conn, nil
+	return conn.(*net.TCPConn), nil
 }
 
 // readFromConnection reads data fron connection
@@ -153,7 +168,7 @@ func readFromConnection(conn *net.TCPConn, buf []byte, timeout time.Duration) er
 		conn.SetReadDeadline(time.Now().Add(timeout))
 	}
 
-	_, err := conn.Read(buf)
+	_, err := io.ReadFull(conn, buf)
 
 	return err
 }

@@ -39,7 +39,7 @@ func ExampleClient_Get() {
 		Port:     9093,
 		Username: "admin",
 		Password: "admin",
-		Endpoint: `jmx["kafka.server:type=ReplicaManager,name=PartitionCount",Value]`,
+		Keys:     []string{`jmx["kafka.server:type=ReplicaManager,name=PartitionCount",Value]`},
 	}
 
 	resp, err := client.Get(r)
@@ -49,5 +49,5 @@ func ExampleClient_Get() {
 		return
 	}
 
-	fmt.Printf("Resp value: %s\n", resp[0]["value"])
+	fmt.Printf("Resp value: %s\n", resp[0].Value)
 }

@@ -26,7 +26,7 @@ func encodeRequest(r *jmxRequest) ([]byte, error) {
 	payload, err := json.Marshal(r)
 
 	if err != nil {
-		return nil, err
+		return nil, errors.New("Can't marshal request data: " + err.Error())
 	}
 
 	sizeBuf := make([]byte, 8)
@@ -56,11 +56,11 @@ func decodeResponse(data []byte) (*jmxResponse, error) {
 	err := json.Unmarshal(data, resp)
 
 	if err != nil {
-		return nil, err
+		return nil, errors.New("Can't unmarshal response data: " + err.Error())
 	}
 
 	if resp.Status != "success" {
-		return nil, errors.New("Java gateway returned error status: " + resp.Status)
+		return nil, errors.New(resp.Error)
 	}
 
 	return resp, nil

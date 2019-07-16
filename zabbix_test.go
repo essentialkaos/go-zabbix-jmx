@@ -40,6 +40,8 @@ var respData2 = `{
   "response": "error"
 }`
 
+var beansData = `{\"data\":[{\"{#JMXDOMAIN}\":\"kafka.server\",\"{#JMXTYPE}\":\"BrokerTopicMetrics\",\"{#JMXOBJ}\":\"kafka.server:type=BrokerTopicMetrics,name=TotalProduceRequestsPerSec\",\"{#JMXNAME}\":\"TotalProduceRequestsPerSec\"},{\"{#JMXDOMAIN}\":\"kafka.server\",\"{#JMXTYPE}\":\"BrokerTopicMetrics\",\"{#JMXOBJ}\":\"kafka.server:type=BrokerTopicMetrics,name=BytesOutPerSec\",\"{#JMXNAME}\":\"BytesOutPerSec\"}]}`
+
 // ////////////////////////////////////////////////////////////////////////////////// //
 
 func (s *JMXSuite) TestClient(c *C) {
@@ -60,7 +62,7 @@ func (s *JMXSuite) TestEncoder(c *C) {
 		Port:     9334,
 		Username: "admin",
 		Password: "admin",
-		Endpoint: `jmx["kafka.server:type=ReplicaManager,name=PartitionCount",Value]`,
+		Keys:     []string{`jmx["kafka.server:type=ReplicaManager,name=PartitionCount",Value]`},
 	}
 
 	jr := convertRequest(r)
@@ -71,7 +73,7 @@ func (s *JMXSuite) TestEncoder(c *C) {
 
 	payloadSize := binary.LittleEndian.Uint64(payload[5:13])
 
-	c.Assert(payloadSize, Equals, uint64(239))
+	c.Assert(payloadSize, Equals, uint64(249))
 }
 
 func (s *JMXSuite) TestDecoder(c *C) {
@@ -103,6 +105,18 @@ func (s *JMXSuite) TestDecoder(c *C) {
 
 	c.Assert(err, NotNil)
 	c.Assert(jr, IsNil)
+}
+
+func (s *JMXSuite) TestBeansDecoder(c *C) {
+	beans, err := ParseBeans(beansData)
+
+	c.Assert(beans, HasLen, 2)
+	c.Assert(err, IsNil)
+
+	beans, err = ParseBeans("ABCD")
+
+	c.Assert(beans, IsNil)
+	c.Assert(err, NotNil)
 }
 
 // ////////////////////////////////////////////////////////////////////////////////// //
