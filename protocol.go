@@ -22,23 +22,25 @@ var zabbixHeader = []byte("ZBXD\x01")
 // ////////////////////////////////////////////////////////////////////////////////// //
 
 // encodeRequest encodes request
-func encodeRequest(r *jmxRequest) ([]byte, error) {
-	payload, err := json.Marshal(r)
+func encodeRequest(r *jmxRequest) []byte {
+	payload, _ := json.Marshal(r)
+	return encodePayload(payload)
+}
 
-	if err != nil {
-		return nil, errors.New("Can't marshal request data: " + err.Error())
-	}
-
-	sizeBuf := make([]byte, 8)
-	binary.LittleEndian.PutUint64(sizeBuf, uint64(len(payload)))
+// encodePayload encodes payload
+func encodePayload(payload []byte) []byte {
+	size := uint64(len(payload))
 
 	var buf bytes.Buffer
+
+	sizeBuf := make([]byte, 8)
+	binary.LittleEndian.PutUint64(sizeBuf, size)
 
 	buf.Write(zabbixHeader)
 	buf.Write(sizeBuf)
 	buf.Write(payload)
 
-	return buf.Bytes(), nil
+	return buf.Bytes()
 }
 
 // decodeMeta decodes response meta

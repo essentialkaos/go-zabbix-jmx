@@ -8,11 +8,21 @@ package jmx
 // ////////////////////////////////////////////////////////////////////////////////// //
 
 import (
-	"bytes"
 	"encoding/binary"
+	"fmt"
+	"net"
 	"testing"
+	"time"
 
 	. "pkg.re/check.v1"
+)
+
+// ////////////////////////////////////////////////////////////////////////////////// //
+
+const (
+	_PORT_OK          = "50001"
+	_PORT_META_ERR    = "50002"
+	_PORT_PAYLOAD_ERR = "50003"
 )
 
 // ////////////////////////////////////////////////////////////////////////////////// //
@@ -44,16 +54,83 @@ var beansData = `{\"data\":[{\"{#JMXDOMAIN}\":\"kafka.server\",\"{#JMXTYPE}\":\"
 
 // ////////////////////////////////////////////////////////////////////////////////// //
 
+func (s *JMXSuite) SetUpSuite(c *C) {
+	go runServer(c, _PORT_OK)
+	go runServer(c, _PORT_META_ERR)
+	go runServer(c, _PORT_PAYLOAD_ERR)
+
+	time.Sleep(time.Second)
+}
+
 func (s *JMXSuite) TestClient(c *C) {
 	client, err := NewClient("127.0.")
 
 	c.Assert(client, IsNil)
 	c.Assert(err, NotNil)
 
-	client, err = NewClient("127.0.0.0:10051")
+	client, err = NewClient("127.0.0.1:10051")
 
 	c.Assert(client, NotNil)
 	c.Assert(err, IsNil)
+}
+
+func (s *JMXSuite) TestClientGet(c *C) {
+	client, err := NewClient("127.0.0.1:" + _PORT_OK)
+
+	c.Assert(client, NotNil)
+	c.Assert(err, IsNil)
+
+	client.ConnectTimeout = time.Second * 3
+	client.WriteTimeout = time.Second * 3
+	client.ReadTimeout = time.Second * 3
+
+	r := &Request{
+		Server: "domain.com",
+		Port:   9334,
+		Keys:   []string{`jmx["kafka.server:type=ReplicaManager,name=PartitionCount",Value]`},
+	}
+
+	resp, err := client.Get(r)
+
+	c.Assert(err, IsNil)
+	c.Assert(resp, NotNil)
+	c.Assert(resp[0].Value, Equals, "112.637")
+
+	// -------
+
+	client, err = NewClient("127.0.0.1:" + _PORT_META_ERR)
+
+	c.Assert(client, NotNil)
+	c.Assert(err, IsNil)
+
+	resp, err = client.Get(r)
+
+	c.Assert(err, NotNil)
+	c.Assert(resp, IsNil)
+
+	// -------
+
+	client, err = NewClient("127.0.0.1:" + _PORT_PAYLOAD_ERR)
+
+	c.Assert(client, NotNil)
+	c.Assert(err, IsNil)
+
+	resp, err = client.Get(r)
+
+	c.Assert(err, NotNil)
+	c.Assert(resp, IsNil)
+
+	// -------
+
+	client, err = NewClient("127.0.0.0:10000")
+
+	c.Assert(client, NotNil)
+	c.Assert(err, IsNil)
+
+	resp, err = client.Get(r)
+
+	c.Assert(err, NotNil)
+	c.Assert(resp, IsNil)
 }
 
 func (s *JMXSuite) TestEncoder(c *C) {
@@ -65,10 +142,8 @@ func (s *JMXSuite) TestEncoder(c *C) {
 		Keys:     []string{`jmx["kafka.server:type=ReplicaManager,name=PartitionCount",Value]`},
 	}
 
-	jr := convertRequest(r)
-	payload, err := encodeRequest(jr)
+	payload := encodeRequest(convertRequest(r))
 
-	c.Assert(err, IsNil)
 	c.Assert(payload[:5], DeepEquals, zabbixHeader)
 
 	payloadSize := binary.LittleEndian.Uint64(payload[5:13])
@@ -77,7 +152,7 @@ func (s *JMXSuite) TestEncoder(c *C) {
 }
 
 func (s *JMXSuite) TestDecoder(c *C) {
-	r := encodeReponse(respData1)
+	r := encodePayload([]byte(respData1))
 
 	size, err := decodeMeta(r)
 
@@ -100,7 +175,7 @@ func (s *JMXSuite) TestDecoder(c *C) {
 	c.Assert(err, NotNil)
 	c.Assert(jr, IsNil)
 
-	r = encodeReponse(respData2)
+	r = encodePayload([]byte(respData2))
 	jr, err = decodeResponse(r[13:])
 
 	c.Assert(err, NotNil)
@@ -121,17 +196,37 @@ func (s *JMXSuite) TestBeansDecoder(c *C) {
 
 // ////////////////////////////////////////////////////////////////////////////////// //
 
-func encodeReponse(data string) []byte {
-	payload := []byte(data)
-	sizeBuf := make([]byte, 8)
+func runServer(c *C, port string) {
+	server, err := net.Listen("tcp4", "127.0.0.1:"+port)
 
-	binary.LittleEndian.PutUint64(sizeBuf, uint64(len(payload)))
+	if err != nil {
+		c.Fatal(err.Error())
+	}
 
-	var buf bytes.Buffer
+	defer server.Close()
 
-	buf.Write(zabbixHeader)
-	buf.Write(sizeBuf)
-	buf.Write(payload)
+	fmt.Printf("Fake server started on %s\n", port)
 
-	return buf.Bytes()
+	for {
+		conn, err := server.Accept()
+
+		if err != nil {
+			c.Fatal(err.Error())
+		}
+
+		handleRequest(conn, port)
+	}
+}
+
+func handleRequest(conn net.Conn, port string) {
+	switch port {
+	case _PORT_OK:
+		conn.Write(encodePayload([]byte(respData1)))
+	case _PORT_META_ERR:
+		conn.Write([]byte(`PAYLOAD12345678`))
+	case _PORT_PAYLOAD_ERR:
+		conn.Write(encodePayload([]byte(`PAYLOAD12345678`)))
+	}
+
+	conn.Close()
 }

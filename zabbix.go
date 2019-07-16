@@ -91,13 +91,7 @@ func (c *Client) Get(r *Request) (Response, error) {
 
 	defer conn.Close() // Zabbix doesn't support persistent connections
 
-	reqData, err := encodeRequest(jr)
-
-	if err != nil {
-		return nil, err
-	}
-
-	err = writeToConnection(conn, reqData, c.WriteTimeout)
+	err = writeToConnection(conn, encodeRequest(jr), c.WriteTimeout)
 
 	if err != nil {
 		return nil, err
