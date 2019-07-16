@@ -34,6 +34,43 @@ For update to the latest stable release, do:
 go get -u pkg.re/essentialkaos/zabbix-jmx.v1
 ```
 
+### Usage example
+
+```go
+package main
+
+import (
+	"fmt"
+	jmx "pkg.re/essentialkaos/zabbix-jmx.v1"
+)
+
+func main() {
+	client, err := jmx.NewClient("127.0.0.1:9335")
+
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
+	}
+
+	r := &jmx.Request{
+		Server:   "domain.com",
+		Port:     9093,
+		Username: "admin",
+		Password: "admin",
+		Endpoint: `jmx["kafka.server:type=ReplicaManager,name=PartitionCount",Value]`,
+	}
+
+	resp, err := client.Get(r)
+
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return
+	}
+
+	fmt.Printf("Resp value: %s\n", resp[0]["value"])
+}
+```
+
 ### Build Status
 
 | Branch | Status |
