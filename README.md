@@ -4,6 +4,7 @@
   <a href="https://godoc.org/pkg.re/essentialkaos/zabbix-jmx.v1"><img src="https://godoc.org/pkg.re/essentialkaos/zabbix-jmx.v1?status.svg"></a>
   <a href="https://goreportcard.com/report/github.com/essentialkaos/zabbix-jmx"><img src="https://goreportcard.com/badge/github.com/essentialkaos/zabbix-jmx"></a>
   <a href="https://travis-ci.org/essentialkaos/zabbix-jmx"><img src="https://travis-ci.org/essentialkaos/zabbix-jmx.svg"></a>
+  <a href="https://codebeat.co/projects/github-com-essentialkaos-zabbix-jmx-master"><img alt="codebeat badge" src="https://codebeat.co/badges/5ea39cff-25ea-4c29-b5f6-97139a584e32" /></a>
   <a href="https://essentialkaos.com/ekol"><img src="https://gh.kaos.st/ekol.svg"></a>
 </p>
 
