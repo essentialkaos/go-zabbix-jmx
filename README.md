@@ -9,7 +9,7 @@
   <a href="https://essentialkaos.com/ekol"><img src="https://gh.kaos.st/ekol.svg"></a>
 </p>
 
-<p align="center"><a href="#installation">Installation</a> • <a href="#usage-example">Usage example</a> • <a href="#build-status">Build Status</a> • <a href="#license">License</a></p>
+<p align="center"><a href="#installation">Installation</a> • <a href="#usage-example">Usage example</a> • <a href="#zabbix-jmx-get">zabbix-jmx-get</a> • <a href="#build-status">Build Status</a> • <a href="#license">License</a></p>
 
 <br/>
 
@@ -70,6 +70,48 @@ func main() {
 
 	fmt.Printf("Resp value: %s\n", resp[0].Value)
 }
+```
+
+### `zabbix-jmx-get`
+
+We also provide a command-line tool `zabbix-jmx-get` for retrieving data from Zabbix Java Gateway.
+
+#### Installation
+
+From sources:
+
+```
+go get -u github.com/essentialkaos/zabbix-jmx/cmd/zabbix-jmx-get
+```
+
+Prebuilt binaries:
+
+```bash
+bash <(curl -fsSL https://apps.kaos.st/get) zabbix-jmx-get
+```
+
+#### Usage examples
+
+```
+$ zabbix-jmx-get -h 127.0.0.1 -p 10052 -H kfk-node1.domain.com -P 9093 'jmx.discovery[beans,"*:type=BrokerTopicMetrics,name=*"]'
+
+kafka.server BrokerTopicMetrics kafka.server:type=BrokerTopicMetrics,name=TotalProduceRequestsPerSec TotalProduceRequestsPerSec
+kafka.server BrokerTopicMetrics kafka.server:type=BrokerTopicMetrics,name=BytesOutPerSec BytesOutPerSec
+kafka.server BrokerTopicMetrics kafka.server:type=BrokerTopicMetrics,name=BytesInPerSec BytesInPerSec
+kafka.server BrokerTopicMetrics kafka.server:type=BrokerTopicMetrics,name=BytesRejectedPerSec BytesRejectedPerSec
+kafka.server BrokerTopicMetrics kafka.server:type=BrokerTopicMetrics,name=FailedProduceRequestsPerSec FailedProduceRequestsPerSec
+kafka.server BrokerTopicMetrics kafka.server:type=BrokerTopicMetrics,name=FetchMessageConversionsPerSec FetchMessageConversionsPerSec
+kafka.server BrokerTopicMetrics kafka.server:type=BrokerTopicMetrics,name=MessagesInPerSec MessagesInPerSec
+kafka.server BrokerTopicMetrics kafka.server:type=BrokerTopicMetrics,name=FailedFetchRequestsPerSec FailedFetchRequestsPerSec
+kafka.server BrokerTopicMetrics kafka.server:type=BrokerTopicMetrics,name=ProduceMessageConversionsPerSec ProduceMessageConversionsPerSec
+kafka.server BrokerTopicMetrics kafka.server:type=BrokerTopicMetrics,name=ReplicationBytesInPerSec ReplicationBytesInPerSec
+kafka.server BrokerTopicMetrics kafka.server:type=BrokerTopicMetrics,name=TotalFetchRequestsPerSec TotalFetchRequestsPerSec
+kafka.server BrokerTopicMetrics kafka.server:type=BrokerTopicMetrics,name=ReplicationBytesOutPerSec ReplicationBytesOutPerSec
+
+$ zabbix-jmx-get -h 127.0.0.1 -p 10052 -H kfk-node1.domain.com -P 9093 'jmx["kafka.server:type=BrokerTopicMetrics,name=BytesInPerSec",OneMinuteRate]'
+
+5668479.780357378
+
 ```
 
 ### Build Status
