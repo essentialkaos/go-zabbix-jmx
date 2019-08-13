@@ -25,5 +25,5 @@ before_install:
 
 script:
   - go test -covermode count -coverprofile cover.out
-  - goveralls -service travis-ci -repotoken $COVERALLS_TOKEN -coverprofile cover.out
+  - goveralls -service travis-ci -repotoken $COVERALLS_TOKEN -coverprofile cover.out || true
   - codeclimate-test-reporter < cover.out
