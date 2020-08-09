@@ -2,8 +2,8 @@ package main
 
 // ////////////////////////////////////////////////////////////////////////////////// //
 //                                                                                    //
-//                     Copyright (c) 2009-2019 ESSENTIAL KAOS                         //
-//        Essential Kaos Open Source License <https://essentialkaos.com/ekol>         //
+//                         Copyright (c) 2020 ESSENTIAL KAOS                          //
+//      Apache License, Version 2.0 <https://www.apache.org/licenses/LICENSE-2.0>     //
 //                                                                                    //
 // ////////////////////////////////////////////////////////////////////////////////// //
 
@@ -13,18 +13,18 @@ import (
 	"strings"
 	"time"
 
-	"pkg.re/essentialkaos/ek.v10/fmtc"
-	"pkg.re/essentialkaos/ek.v10/options"
-	"pkg.re/essentialkaos/ek.v10/usage"
+	"pkg.re/essentialkaos/ek.v12/fmtc"
+	"pkg.re/essentialkaos/ek.v12/options"
+	"pkg.re/essentialkaos/ek.v12/usage"
 
-	jmx "github.com/essentialkaos/zabbix-jmx"
+	jmx "pkg.re/essentialkaos/go-zabbix-jmx.v1"
 )
 
 // ////////////////////////////////////////////////////////////////////////////////// //
 
 const (
 	APP  = "zabbix-jmx-get"
-	VER  = "1.0.0"
+	VER  = "1.1.0"
 	DESC = "Tool for fetching data from Zabbix Java Gateway"
 )
 
@@ -251,7 +251,7 @@ func showAbout() {
 		Desc:    DESC,
 		Year:    2006,
 		Owner:   "ESSENTIAL KAOS",
-		License: "Essential Kaos Open Source License <https://essentialkaos.com/ekol>",
+		License: "Apache License, Version 2.0 <https://www.apache.org/licenses/LICENSE-2.0>",
 	}
 
 	about.Render()
