@@ -1,13 +1,13 @@
 <p align="center"><a href="#readme"><img src="https://gh.kaos.st/go-zabbix-jmx.svg"/></a></p>
 
 <p align="center">
-  <a href="https://godoc.org/pkg.re/essentialkaos/zabbix-jmx.v1"><img src="https://godoc.org/pkg.re/essentialkaos/zabbix-jmx.v1?status.svg"></a>
+  <a href="https://pkg.go.dev/github.com/essentialkaos/zabbix-jmx"><img src="https://pkg.go.dev/badge/github.com/essentialkaos/zabbix-jmx" /></a>
   <a href="https://goreportcard.com/report/github.com/essentialkaos/zabbix-jmx"><img src="https://goreportcard.com/badge/github.com/essentialkaos/zabbix-jmx"></a>
   <a href="https://travis-ci.com/essentialkaos/zabbix-jmx"><img src="https://travis-ci.com/essentialkaos/zabbix-jmx.svg"></a>
   <a href="https://github.com/essentialkaos/zabbix-jmx/actions?query=workflow%3ACodeQL"><img src="https://github.com/essentialkaos/zabbix-jmx/workflows/CodeQL/badge.svg" /></a>
   <a href='https://coveralls.io/github/essentialkaos/zabbix-jmx?branch=develop'><img src='https://coveralls.io/repos/github/essentialkaos/zabbix-jmx/badge.svg?branch=develop' alt='Coverage Status' /></a>
   <a href="https://codebeat.co/projects/github-com-essentialkaos-zabbix-jmx-master"><img alt="codebeat badge" src="https://codebeat.co/badges/5ea39cff-25ea-4c29-b5f6-97139a584e32" /></a>
-  <a href="https://essentialkaos.com/ekol"><img src="https://gh.kaos.st/ekol.svg"></a>
+  <a href="#license"><img src="https://gh.kaos.st/apache2.svg"></a>
 </p>
 
 <p align="center"><a href="#installation">Installation</a> • <a href="#usage-example">Usage example</a> • <a href="#zabbix-jmx-get">zabbix-jmx-get</a> • <a href="#build-status">Build Status</a> • <a href="#license">License</a></p>
@@ -124,6 +124,6 @@ $ zabbix-jmx-get -h 127.0.0.1 -p 10052 -H kfk-node1.domain.com -P 9093 'jmx["kaf
 
 ### License
 
-[EKOL](https://essentialkaos.com/ekol)
+[Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
 <p align="center"><a href="https://essentialkaos.com"><img src="https://gh.kaos.st/ekgh.svg"/></a></p>
