@@ -1,11 +1,11 @@
 <p align="center"><a href="#readme"><img src="https://gh.kaos.st/go-zabbix-jmx.svg"/></a></p>
 
 <p align="center">
-  <a href="https://pkg.go.dev/github.com/essentialkaos/zabbix-jmx"><img src="https://pkg.go.dev/badge/github.com/essentialkaos/zabbix-jmx" /></a>
-  <a href="https://goreportcard.com/report/github.com/essentialkaos/zabbix-jmx"><img src="https://goreportcard.com/badge/github.com/essentialkaos/zabbix-jmx"></a>
-  <a href="https://travis-ci.com/essentialkaos/zabbix-jmx"><img src="https://travis-ci.com/essentialkaos/zabbix-jmx.svg"></a>
-  <a href="https://github.com/essentialkaos/zabbix-jmx/actions?query=workflow%3ACodeQL"><img src="https://github.com/essentialkaos/zabbix-jmx/workflows/CodeQL/badge.svg" /></a>
-  <a href='https://coveralls.io/github/essentialkaos/zabbix-jmx?branch=develop'><img src='https://coveralls.io/repos/github/essentialkaos/zabbix-jmx/badge.svg?branch=develop' alt='Coverage Status' /></a>
+  <a href="https://pkg.go.dev/github.com/essentialkaos/go-zabbix-jmx"><img src="https://pkg.go.dev/badge/github.com/essentialkaos/go-zabbix-jmx" /></a>
+  <a href="https://goreportcard.com/report/github.com/essentialkaos/go-zabbix-jmx"><img src="https://goreportcard.com/badge/github.com/essentialkaos/go-zabbix-jmx"></a>
+  <a href="https://travis-ci.com/essentialkaos/go-zabbix-jmx"><img src="https://travis-ci.com/essentialkaos/go-zabbix-jmx.svg"></a>
+  <a href="https://github.com/essentialkaos/go-zabbix-jmx/actions?query=workflow%3ACodeQL"><img src="https://github.com/essentialkaos/go-zabbix-jmx/workflows/CodeQL/badge.svg" /></a>
+  <a href='https://coveralls.io/github/essentialkaos/go-zabbix-jmx?branch=develop'><img src='https://coveralls.io/repos/github/essentialkaos/go-zabbix-jmx/badge.svg?branch=develop' alt='Coverage Status' /></a>
   <a href="https://codebeat.co/projects/github-com-essentialkaos-zabbix-jmx-master"><img alt="codebeat badge" src="https://codebeat.co/badges/5ea39cff-25ea-4c29-b5f6-97139a584e32" /></a>
   <a href="#license"><img src="https://gh.kaos.st/apache2.svg"></a>
 </p>
@@ -27,13 +27,13 @@ git config --global http.https://pkg.re.followRedirects true
 Make sure you have a working Go 1.12+ workspace (_[instructions](https://golang.org/doc/install)_), then:
 
 ```
-go get pkg.re/essentialkaos/zabbix-jmx.v1
+go get pkg.re/essentialkaos/go-zabbix-jmx.v1
 ```
 
 For update to the latest stable release, do:
 
 ```
-go get -u pkg.re/essentialkaos/zabbix-jmx.v1
+go get -u pkg.re/essentialkaos/go-zabbix-jmx.v1
 ```
 
 ### Usage example
@@ -43,7 +43,7 @@ package main
 
 import (
 	"fmt"
-	jmx "pkg.re/essentialkaos/zabbix-jmx.v1"
+	jmx "pkg.re/essentialkaos/go-zabbix-jmx.v1"
 )
 
 func main() {
@@ -82,7 +82,7 @@ We also provide a command-line tool `zabbix-jmx-get` for retrieving data from Za
 From sources:
 
 ```
-go get -u github.com/essentialkaos/zabbix-jmx/cmd/zabbix-jmx-get
+go get -u github.com/essentialkaos/go-zabbix-jmx/cmd/zabbix-jmx-get
 ```
 
 Prebuilt binaries:
@@ -119,8 +119,8 @@ $ zabbix-jmx-get -h 127.0.0.1 -p 10052 -H kfk-node1.domain.com -P 9093 'jmx["kaf
 
 | Branch | Status |
 |--------|--------|
-| `master` | [![Build Status](https://travis-ci.com/essentialkaos/zabbix-jmx.svg?branch=master)](https://travis-ci.com/essentialkaos/zabbix-jmx) |
-| `develop` | [![Build Status](https://travis-ci.com/essentialkaos/zabbix-jmx.svg?branch=develop)](https://travis-ci.com/essentialkaos/zabbix-jmx) |
+| `master` | [![Build Status](https://travis-ci.com/essentialkaos/go-zabbix-jmx.svg?branch=master)](https://travis-ci.com/essentialkaos/go-zabbix-jmx) |
+| `develop` | [![Build Status](https://travis-ci.com/essentialkaos/go-zabbix-jmx.svg?branch=develop)](https://travis-ci.com/essentialkaos/go-zabbix-jmx) |
 
 ### License
 

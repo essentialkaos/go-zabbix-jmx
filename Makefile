@@ -16,7 +16,7 @@ git-config: ## Configure git redirects for stable import path services
 	git config --global http.https://pkg.re.followRedirects true
 
 deps: git-config ## Download dependencies
-	go get -d -v pkg.re/essentialkaos/ek.v10
+	go get -d -v pkg.re/essentialkaos/ek.v12
 
 deps-test: git-config ## Download dependencies for tests
 	go get -d -v pkg.re/check.v1

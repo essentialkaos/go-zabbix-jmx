@@ -13,18 +13,18 @@ import (
 	"strings"
 	"time"
 
-	"pkg.re/essentialkaos/ek.v10/fmtc"
-	"pkg.re/essentialkaos/ek.v10/options"
-	"pkg.re/essentialkaos/ek.v10/usage"
+	"pkg.re/essentialkaos/ek.v12/fmtc"
+	"pkg.re/essentialkaos/ek.v12/options"
+	"pkg.re/essentialkaos/ek.v12/usage"
 
-	jmx "github.com/essentialkaos/zabbix-jmx"
+	jmx "pkg.re/essentialkaos/go-zabbix-jmx.v1"
 )
 
 // ////////////////////////////////////////////////////////////////////////////////// //
 
 const (
 	APP  = "zabbix-jmx-get"
-	VER  = "1.0.0"
+	VER  = "1.1.0"
 	DESC = "Tool for fetching data from Zabbix Java Gateway"
 )
 
