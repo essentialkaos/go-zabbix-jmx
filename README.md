@@ -3,7 +3,7 @@
 <p align="center">
   <a href="https://pkg.go.dev/github.com/essentialkaos/go-zabbix-jmx"><img src="https://pkg.go.dev/badge/github.com/essentialkaos/go-zabbix-jmx" /></a>
   <a href="https://goreportcard.com/report/github.com/essentialkaos/go-zabbix-jmx"><img src="https://goreportcard.com/badge/github.com/essentialkaos/go-zabbix-jmx"></a>
-  <a href="https://travis-ci.com/essentialkaos/go-zabbix-jmx"><img src="https://travis-ci.com/essentialkaos/go-zabbix-jmx.svg"></a>
+  <a href="https://github.com/essentialkaos/go-zabbix-jmx/actions"><img src="https://github.com/essentialkaos/go-zabbix-jmx/workflows/CI/badge.svg" alt="GitHub Actions Status" /></a>
   <a href="https://github.com/essentialkaos/go-zabbix-jmx/actions?query=workflow%3ACodeQL"><img src="https://github.com/essentialkaos/go-zabbix-jmx/workflows/CodeQL/badge.svg" /></a>
   <a href='https://coveralls.io/github/essentialkaos/go-zabbix-jmx?branch=develop'><img src='https://coveralls.io/repos/github/essentialkaos/go-zabbix-jmx/badge.svg?branch=develop' alt='Coverage Status' /></a>
   <a href="https://codebeat.co/projects/github-com-essentialkaos-go-zabbix-jmx-master"><img alt="codebeat badge" src="https://codebeat.co/badges/31cf4383-04c5-4ba4-85d2-85835e41d7fc" /></a>
@@ -119,8 +119,8 @@ $ zabbix-jmx-get -h 127.0.0.1 -p 10052 -H kfk-node1.domain.com -P 9093 'jmx["kaf
 
 | Branch | Status |
 |--------|--------|
-| `master` | [![Build Status](https://travis-ci.com/essentialkaos/go-zabbix-jmx.svg?branch=master)](https://travis-ci.com/essentialkaos/go-zabbix-jmx) |
-| `develop` | [![Build Status](https://travis-ci.com/essentialkaos/go-zabbix-jmx.svg?branch=develop)](https://travis-ci.com/essentialkaos/go-zabbix-jmx) |
+| `master` | [![CI](https://github.com/essentialkaos/go-zabbix-jmx/workflows/CI/badge.svg?branch=master)](https://github.com/essentialkaos/go-zabbix-jmx/actions) |
+| `develop` | [![CI](https://github.com/essentialkaos/go-zabbix-jmx/workflows/CI/badge.svg?branch=develop)](https://github.com/essentialkaos/go-zabbix-jmx/actions) |
 
 ### License
 
