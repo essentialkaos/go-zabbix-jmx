@@ -1,12 +1,12 @@
 <p align="center"><a href="#readme"><img src="https://gh.kaos.st/go-zabbix-jmx.svg"/></a></p>
 
 <p align="center">
-  <a href="https://pkg.re/essentialkaos/go-zabbix-jmx.v1?docs"><img src="https://gh.kaos.st/godoc.svg" alt="PkgGoDev"></a>
-  <a href="https://goreportcard.com/report/github.com/essentialkaos/go-zabbix-jmx"><img src="https://goreportcard.com/badge/github.com/essentialkaos/go-zabbix-jmx"></a>
-  <a href="https://github.com/essentialkaos/go-zabbix-jmx/actions"><img src="https://github.com/essentialkaos/go-zabbix-jmx/workflows/CI/badge.svg" alt="GitHub Actions Status" /></a>
-  <a href="https://github.com/essentialkaos/go-zabbix-jmx/actions?query=workflow%3ACodeQL"><img src="https://github.com/essentialkaos/go-zabbix-jmx/workflows/CodeQL/badge.svg" /></a>
-  <a href='https://coveralls.io/github/essentialkaos/go-zabbix-jmx?branch=develop'><img src='https://coveralls.io/repos/github/essentialkaos/go-zabbix-jmx/badge.svg?branch=develop' alt='Coverage Status' /></a>
-  <a href="https://codebeat.co/projects/github-com-essentialkaos-go-zabbix-jmx-master"><img alt="codebeat badge" src="https://codebeat.co/badges/31cf4383-04c5-4ba4-85d2-85835e41d7fc" /></a>
+  <a href="https://kaos.sh/g/go-zabbix-jmx.v1"><img src="https://gh.kaos.st/godoc.svg" alt="PkgGoDev" /></a>
+  <a href="https://kaos.sh/r/go-zabbix-jmx"><img src="https://kaos.sh/r/go-zabbix-jmx.svg" alt="GoReportCard" /></a>
+  <a href="https://kaos.sh/w/go-zabbix-jmx/ci"><img src="https://kaos.sh/w/go-zabbix-jmx/ci.svg" alt="GitHub Actions CI Status" /></a>
+  <a href="https://kaos.sh/w/go-zabbix-jmx/codeql"><img src="https://kaos.sh/w/go-zabbix-jmx/codeql.svg" alt="GitHub Actions CodeQL Status" /></a>
+  <a href="https://kaos.sh/c/go-zabbix-jmx"><img src="https://kaos.sh/c/go-zabbix-jmx.svg" alt="Coverage Status" /></a>
+  <a href="https://kaos.sh/b/go-zabbix-jmx"><img src="https://kaos.sh/b/31cf4383-04c5-4ba4-85d2-85835e41d7fc.svg" alt="Codebeat badge" /></a>
   <a href="#license"><img src="https://gh.kaos.st/apache2.svg"></a>
 </p>
 
@@ -18,16 +18,16 @@
 
 ### Installation
 
-Make sure you have a working Go 1.14+ workspace (_[instructions](https://golang.org/doc/install)_), then:
+Make sure you have a working Go 1.15+ workspace (_[instructions](https://golang.org/doc/install)_), then:
 
 ```
-go get pkg.re/essentialkaos/go-zabbix-jmx.v1
+go get -d pkg.re/essentialkaos/go-zabbix-jmx.v1
 ```
 
 For update to the latest stable release, do:
 
 ```
-go get -u pkg.re/essentialkaos/go-zabbix-jmx.v1
+go get -d -u pkg.re/essentialkaos/go-zabbix-jmx.v1
 ```
 
 ### Usage example
@@ -113,8 +113,8 @@ $ zabbix-jmx-get -h 127.0.0.1 -p 10052 -H kfk-node1.domain.com -P 9093 'jmx["kaf
 
 | Branch | Status |
 |--------|--------|
-| `master` | [![CI](https://github.com/essentialkaos/go-zabbix-jmx/workflows/CI/badge.svg?branch=master)](https://github.com/essentialkaos/go-zabbix-jmx/actions) |
-| `develop` | [![CI](https://github.com/essentialkaos/go-zabbix-jmx/workflows/CI/badge.svg?branch=develop)](https://github.com/essentialkaos/go-zabbix-jmx/actions) |
+| `master` | [![CI](https://kaos.sh/w/go-zabbix-jmx/ci.svg?branch=master)](https://kaos.sh/w/go-zabbix-jmx/ci?query=branch:master) |
+| `develop` | [![CI](https://kaos.sh/w/go-zabbix-jmx/ci.svg?branch=develop)](https://kaos.sh/w/go-zabbix-jmx/ci?query=branch:develop) |
 
 ### License
 
