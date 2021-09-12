@@ -107,4 +107,4 @@ jobs:
         uses: essentialkaos/aligo-action@v1
         with:
           path: ${{env.SRC_DIR}}
-          files: ./...
+          files: .
