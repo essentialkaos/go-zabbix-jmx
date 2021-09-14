@@ -49,8 +49,8 @@ jobs:
         uses: essentialkaos/coverage-action@master
         with:
           coverage: ./cover.out
-          coveralls: yes
-          codebeat: yes
+          coveralls-token: ${{ secrets.GITHUB_TOKEN }}
+          codebeat-token: ${{ secrets.CODECLIMATE_TOKEN }}
 
   Aligo:
     name: Aligo
