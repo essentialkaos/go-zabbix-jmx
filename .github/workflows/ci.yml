@@ -48,7 +48,7 @@ jobs:
       - name: Send coverage
         uses: essentialkaos/coverage-action@master
         with:
-          coverage: ./cover.out
+          coverage: ${{env.SRC_DIR}}/cover.out
           coveralls-token: ${{ secrets.GITHUB_TOKEN }}
           codebeat-token: ${{ secrets.CODECLIMATE_TOKEN }}
 
