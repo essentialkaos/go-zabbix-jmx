@@ -2,7 +2,7 @@ package main
 
 // ////////////////////////////////////////////////////////////////////////////////// //
 //                                                                                    //
-//                         Copyright (c) 2021 ESSENTIAL KAOS                          //
+//                         Copyright (c) 2022 ESSENTIAL KAOS                          //
 //      Apache License, Version 2.0 <https://www.apache.org/licenses/LICENSE-2.0>     //
 //                                                                                    //
 // ////////////////////////////////////////////////////////////////////////////////// //
@@ -13,18 +13,18 @@ import (
 	"strings"
 	"time"
 
-	"pkg.re/essentialkaos/ek.v12/fmtc"
-	"pkg.re/essentialkaos/ek.v12/options"
-	"pkg.re/essentialkaos/ek.v12/usage"
+	"github.com/essentialkaos/ek/fmtc"
+	"github.com/essentialkaos/ek/options"
+	"github.com/essentialkaos/ek/usage"
 
-	jmx "pkg.re/essentialkaos/go-zabbix-jmx.v1"
+	jmx "github.com/essentialkaos/go-zabbix-jmx"
 )
 
 // ////////////////////////////////////////////////////////////////////////////////// //
 
 const (
 	APP  = "zabbix-jmx-get"
-	VER  = "1.1.0"
+	VER  = "1.1.1"
 	DESC = "Tool for fetching data from Zabbix Java Gateway"
 )
 
