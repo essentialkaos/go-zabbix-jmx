@@ -76,7 +76,7 @@ We also provide a command-line tool `zabbix-jmx-get` for retrieving data from Za
 From sources:
 
 ```
-go get -u github.com/essentialkaos/go-zabbix-jmx/cmd/zabbix-jmx-get
+go install github.com/essentialkaos/go-zabbix-jmx/cmd/zabbix-jmx-get
 ```
 
 Prebuilt binaries:
