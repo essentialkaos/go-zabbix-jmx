@@ -1,7 +1,7 @@
 <p align="center"><a href="#readme"><img src="https://gh.kaos.st/go-zabbix-jmx.svg"/></a></p>
 
 <p align="center">
-  <a href="https://kaos.sh/g/go-zabbix-jmx.v1"><img src="https://gh.kaos.st/godoc.svg" alt="PkgGoDev" /></a>
+  <a href="https://kaos.sh/g/go-zabbix-jmx"><img src="https://gh.kaos.st/godoc.svg" alt="PkgGoDev" /></a>
   <a href="https://kaos.sh/r/go-zabbix-jmx"><img src="https://kaos.sh/r/go-zabbix-jmx.svg" alt="GoReportCard" /></a>
   <a href="https://kaos.sh/w/go-zabbix-jmx/ci"><img src="https://kaos.sh/w/go-zabbix-jmx/ci.svg" alt="GitHub Actions CI Status" /></a>
   <a href="https://kaos.sh/w/go-zabbix-jmx/codeql"><img src="https://kaos.sh/w/go-zabbix-jmx/codeql.svg" alt="GitHub Actions CodeQL Status" /></a>
@@ -18,16 +18,16 @@
 
 ### Installation
 
-Make sure you have a working Go 1.16+ workspace (_[instructions](https://golang.org/doc/install)_), then:
+Make sure you have a working Go 1.17+ workspace (_[instructions](https://golang.org/doc/install)_), then:
 
 ```
-go get -d pkg.re/essentialkaos/go-zabbix-jmx.v1
+go get -d github.com/essentialkaos/go-zabbix-jmx
 ```
 
 For update to the latest stable release, do:
 
 ```
-go get -d -u pkg.re/essentialkaos/go-zabbix-jmx.v1
+go get -d -u github.com/essentialkaos/go-zabbix-jmx
 ```
 
 ### Usage example
@@ -37,7 +37,7 @@ package main
 
 import (
 	"fmt"
-	jmx "pkg.re/essentialkaos/go-zabbix-jmx.v1"
+	jmx "github.com/essentialkaos/go-zabbix-jmx"
 )
 
 func main() {
@@ -76,7 +76,7 @@ We also provide a command-line tool `zabbix-jmx-get` for retrieving data from Za
 From sources:
 
 ```
-go get -u github.com/essentialkaos/go-zabbix-jmx/cmd/zabbix-jmx-get
+go install github.com/essentialkaos/go-zabbix-jmx/cmd/zabbix-jmx-get
 ```
 
 Prebuilt binaries:
