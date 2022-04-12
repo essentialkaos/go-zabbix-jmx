@@ -13,9 +13,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/essentialkaos/ek/fmtc"
-	"github.com/essentialkaos/ek/options"
-	"github.com/essentialkaos/ek/usage"
+	"github.com/essentialkaos/ek/v12/fmtc"
+	"github.com/essentialkaos/ek/v12/options"
+	"github.com/essentialkaos/ek/v12/usage"
 
 	jmx "github.com/essentialkaos/go-zabbix-jmx"
 )
@@ -24,7 +24,7 @@ import (
 
 const (
 	APP  = "zabbix-jmx-get"
-	VER  = "1.1.1"
+	VER  = "1.1.2"
 	DESC = "Tool for fetching data from Zabbix Java Gateway"
 )
 
