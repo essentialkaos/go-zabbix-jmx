@@ -3,8 +3,8 @@ module github.com/essentialkaos/go-zabbix-jmx
 go 1.17
 
 require (
-	github.com/essentialkaos/check v1.3.0
-	github.com/essentialkaos/ek/v12 v12.60.1
+	github.com/essentialkaos/check v1.4.0
+	github.com/essentialkaos/ek/v12 v12.61.0
 )
 
 require (
