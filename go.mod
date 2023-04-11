@@ -1,6 +1,6 @@
 module github.com/essentialkaos/go-zabbix-jmx
 
-go 1.17
+go 1.18
 
 require (
 	github.com/essentialkaos/check v1.4.0
