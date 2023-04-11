@@ -18,16 +18,10 @@
 
 ### Installation
 
-Make sure you have a working Go 1.17+ workspace (_[instructions](https://golang.org/doc/install)_), then:
+Make sure you have a working Go 1.18+ workspace (_[instructions](https://golang.org/doc/install)_), then:
 
-```
-go get -d github.com/essentialkaos/go-zabbix-jmx
-```
-
-For update to the latest stable release, do:
-
-```
-go get -d -u github.com/essentialkaos/go-zabbix-jmx
+```bash
+go get -u github.com/essentialkaos/go-zabbix-jmx
 ```
 
 ### Usage example
