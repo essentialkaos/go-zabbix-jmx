@@ -1,28 +1,20 @@
-<p align="center"><a href="#readme"><img src="https://gh.kaos.st/go-zabbix-jmx.svg"/></a></p>
+<p align="center"><a href="#readme"><img src=".github/images/card.svg"/></a></p>
 
 <p align="center">
-  <a href="https://kaos.sh/g/go-zabbix-jmx"><img src="https://gh.kaos.st/godoc.svg" alt="PkgGoDev" /></a>
+  <a href="https://kaos.sh/g/go-zabbix-jmx"><img src=".github/images/godoc.svg"/></a>
   <a href="https://kaos.sh/r/go-zabbix-jmx"><img src="https://kaos.sh/r/go-zabbix-jmx.svg" alt="GoReportCard" /></a>
   <a href="https://kaos.sh/w/go-zabbix-jmx/ci"><img src="https://kaos.sh/w/go-zabbix-jmx/ci.svg" alt="GitHub Actions CI Status" /></a>
   <a href="https://kaos.sh/w/go-zabbix-jmx/codeql"><img src="https://kaos.sh/w/go-zabbix-jmx/codeql.svg" alt="GitHub Actions CodeQL Status" /></a>
   <a href="https://kaos.sh/c/go-zabbix-jmx"><img src="https://kaos.sh/c/go-zabbix-jmx.svg" alt="Coverage Status" /></a>
   <a href="https://kaos.sh/b/go-zabbix-jmx"><img src="https://kaos.sh/b/31cf4383-04c5-4ba4-85d2-85835e41d7fc.svg" alt="Codebeat badge" /></a>
-  <a href="#license"><img src="https://gh.kaos.st/apache2.svg"></a>
+  <a href="#license"><img src=".github/images/license.svg"/></a>
 </p>
 
-<p align="center"><a href="#installation">Installation</a> • <a href="#usage-example">Usage example</a> • <a href="#zabbix-jmx-get">zabbix-jmx-get</a> • <a href="#build-status">Build Status</a> • <a href="#license">License</a></p>
+<p align="center"><a href="#usage-example">Usage example</a> • <a href="#zabbix-jmx-get">zabbix-jmx-get</a> • <a href="#ci-status">CI Status</a> • <a href="#license">License</a></p>
 
 <br/>
 
 `zabbix-jmx` is a Go package for retrieving and parsing data from Zabbix Java Gateway.
-
-### Installation
-
-Make sure you have a working Go 1.18+ workspace (_[instructions](https://go.dev/doc/install)_), then:
-
-```bash
-go get -u github.com/essentialkaos/go-zabbix-jmx
-```
 
 ### Usage example
 
@@ -70,7 +62,7 @@ We also provide a command-line tool `zabbix-jmx-get` for retrieving data from Za
 From sources:
 
 ```
-go install github.com/essentialkaos/go-zabbix-jmx/cmd/zabbix-jmx-get
+go install github.com/essentialkaos/go-zabbix-jmx/cmd/zabbix-jmx-get@latest
 ```
 
 Prebuilt binaries:
@@ -103,7 +95,7 @@ $ zabbix-jmx-get -h 127.0.0.1 -p 10052 -H kfk-node1.domain.com -P 9093 'jmx["kaf
 
 ```
 
-### Build Status
+### CI Status
 
 | Branch | Status |
 |--------|--------|
