@@ -2,7 +2,6 @@
 
 <p align="center">
   <a href="https://kaos.sh/g/go-zabbix-jmx"><img src=".github/images/godoc.svg"/></a>
-  <a href="https://kaos.sh/r/go-zabbix-jmx"><img src="https://kaos.sh/r/go-zabbix-jmx.svg" alt="GoReportCard" /></a>
   <a href="https://kaos.sh/w/go-zabbix-jmx/ci"><img src="https://kaos.sh/w/go-zabbix-jmx/ci.svg" alt="GitHub Actions CI Status" /></a>
   <a href="https://kaos.sh/w/go-zabbix-jmx/codeql"><img src="https://kaos.sh/w/go-zabbix-jmx/codeql.svg" alt="GitHub Actions CodeQL Status" /></a>
   <a href="https://kaos.sh/c/go-zabbix-jmx"><img src="https://kaos.sh/c/go-zabbix-jmx.svg" alt="Coverage Status" /></a>
