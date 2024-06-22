@@ -2,7 +2,7 @@ package main
 
 // ////////////////////////////////////////////////////////////////////////////////// //
 //                                                                                    //
-//                         Copyright (c) 2022 ESSENTIAL KAOS                          //
+//                         Copyright (c) 2023 ESSENTIAL KAOS                          //
 //      Apache License, Version 2.0 <https://www.apache.org/licenses/LICENSE-2.0>     //
 //                                                                                    //
 // ////////////////////////////////////////////////////////////////////////////////// //
@@ -208,7 +208,7 @@ func printError(f string, a ...interface{}) {
 	fmtc.Fprintf(os.Stderr, "{r}"+f+"{!}\n", a...)
 }
 
-// printErrorAndExit print error mesage and exit with exit code 1
+// printErrorAndExit print error message and exit with exit code 1
 func printErrorAndExit(f string, a ...interface{}) {
 	printError(f, a...)
 	os.Exit(1)
