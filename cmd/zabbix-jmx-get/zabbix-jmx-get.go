@@ -15,7 +15,13 @@ import (
 
 	"github.com/essentialkaos/ek/v12/fmtc"
 	"github.com/essentialkaos/ek/v12/options"
+	"github.com/essentialkaos/ek/v12/terminal"
+	"github.com/essentialkaos/ek/v12/terminal/tty"
 	"github.com/essentialkaos/ek/v12/usage"
+	"github.com/essentialkaos/ek/v12/usage/completion/bash"
+	"github.com/essentialkaos/ek/v12/usage/completion/fish"
+	"github.com/essentialkaos/ek/v12/usage/completion/zsh"
+	"github.com/essentialkaos/ek/v12/usage/man"
 
 	jmx "github.com/essentialkaos/go-zabbix-jmx"
 )
@@ -24,7 +30,7 @@ import (
 
 const (
 	APP  = "zabbix-jmx-get"
-	VER  = "1.1.2"
+	VER  = "1.2.0"
 	DESC = "Tool for fetching data from Zabbix Java Gateway"
 )
 
@@ -40,6 +46,9 @@ const (
 	OPT_NO_COLOR     = "nc:no-color"
 	OPT_HELP         = "help"
 	OPT_VER          = "v:version"
+
+	OPT_COMPLETION   = "completion"
+	OPT_GENERATE_MAN = "generate-man"
 )
 
 // ////////////////////////////////////////////////////////////////////////////////// //
@@ -52,64 +61,80 @@ var optMap = options.Map{
 	OPT_USERNAME:     {},
 	OPT_PASSWORD:     {},
 	OPT_NO_COLOR:     {Type: options.BOOL},
-	OPT_HELP:         {Type: options.BOOL, Alias: "u:usage"},
-	OPT_VER:          {Type: options.BOOL, Alias: "ver"},
+	OPT_HELP:         {Type: options.BOOL},
+	OPT_VER:          {Type: options.BOOL},
+
+	OPT_COMPLETION:   {},
+	OPT_GENERATE_MAN: {Type: options.BOOL},
 }
 
 // ////////////////////////////////////////////////////////////////////////////////// //
 
 func main() {
-	keys, errs := options.Parse(optMap)
+	preConfigureUI()
 
-	if len(errs) != 0 {
-		for _, err := range errs {
-			printError(err.Error())
-		}
+	args, errs := options.Parse(optMap)
 
+	if !errs.IsEmpty() {
+		terminal.Error("Options parsing errors:")
+		terminal.Error(errs.String())
 		os.Exit(1)
 	}
 
 	configureUI()
 
-	if options.GetB(OPT_VER) {
-		showAbout()
-		return
+	switch {
+	case options.Has(OPT_COMPLETION):
+		os.Exit(printCompletion())
+	case options.Has(OPT_GENERATE_MAN):
+		printMan()
+		os.Exit(0)
+	case options.GetB(OPT_VER):
+		genAbout().Print(options.GetS(OPT_VER))
+		os.Exit(0)
+	case options.GetB(OPT_HELP) || options.GetS(OPT_GATEWAY_HOST) == "true" || len(args) == 0:
+		genUsage().Print()
+		os.Exit(0)
 	}
 
-	if options.Has(OPT_GATEWAY_HOST) && options.GetS(OPT_GATEWAY_HOST) == "true" {
-		showUsage()
-		return
-	}
-
-	if options.GetB(OPT_HELP) || len(keys) == 0 {
-		showUsage()
-		return
-	}
-
-	process(keys)
+	process(args.Strings())
 }
 
-// checkOptions checks required options
-func checkOptions() {
+// preConfigureUI preconfigures UI based on information about user terminal
+func preConfigureUI() {
+	if !tty.IsTTY() {
+		fmtc.DisableColors = true
+	}
+}
+
+// configureUI configures user interface
+func configureUI() {
+	if options.GetB(OPT_NO_COLOR) {
+		fmtc.DisableColors = true
+	}
+}
+
+// validateOptions checks for required options
+func validateOptions() {
 	optionsSet := true
 
 	if !options.Has(OPT_GATEWAY_HOST) {
-		printError("Option --%s is required", "host")
+		terminal.Error("Option %s is required", options.F(OPT_GATEWAY_HOST))
 		optionsSet = false
 	}
 
 	if !options.Has(OPT_GATEWAY_PORT) {
-		printError("Option --%s is required", "port")
+		terminal.Error("Option %s is required", options.F(OPT_GATEWAY_PORT))
 		optionsSet = false
 	}
 
 	if !options.Has(OPT_SERVER_HOST) {
-		printError("Option --%s is required", "server-host")
+		terminal.Error("Option %s is required", options.F(OPT_SERVER_HOST))
 		optionsSet = false
 	}
 
 	if !options.Has(OPT_SERVER_PORT) {
-		printError("Option --%s is required", "server-port")
+		terminal.Error("Option %s is required", options.F(OPT_SERVER_PORT))
 		optionsSet = false
 	}
 
@@ -158,7 +183,7 @@ func renderBeansData(data string) {
 	beans, err := jmx.ParseBeans(data)
 
 	if err != nil {
-		printError(err.Error())
+		terminal.Error(err)
 		return
 	}
 
@@ -196,28 +221,39 @@ func makeRequest(keys []string) *jmx.Request {
 	return r
 }
 
-// configureUI configure UI on start
-func configureUI() {
-	if options.GetB(OPT_NO_COLOR) {
-		fmtc.DisableColors = true
-	}
-}
-
-// printError prints error message to console
-func printError(f string, a ...interface{}) {
-	fmtc.Fprintf(os.Stderr, "{r}"+f+"{!}\n", a...)
-}
-
 // printErrorAndExit print error message and exit with exit code 1
 func printErrorAndExit(f string, a ...interface{}) {
-	printError(f, a...)
+	terminal.Error(f, a...)
 	os.Exit(1)
 }
 
 // ////////////////////////////////////////////////////////////////////////////////// //
 
-// showUsage prints usage info
-func showUsage() {
+// printCompletion prints completion for given shell
+func printCompletion() int {
+	info := genUsage()
+
+	switch options.GetS(OPT_COMPLETION) {
+	case "bash":
+		fmt.Printf(bash.Generate(info, APP))
+	case "fish":
+		fmt.Printf(fish.Generate(info, APP))
+	case "zsh":
+		fmt.Printf(zsh.Generate(info, optMap, APP))
+	default:
+		return 1
+	}
+
+	return 0
+}
+
+// printMan prints man page
+func printMan() {
+	fmt.Println(man.Generate(genUsage(), genAbout()))
+}
+
+// genUsage generates usage info
+func genUsage() *usage.Info {
 	info := usage.NewInfo("", "key…")
 
 	info.AddOption(OPT_GATEWAY_HOST, "Java gateway host", "host")
@@ -240,19 +276,19 @@ func showUsage() {
 		"Request discovery info",
 	)
 
-	info.Render()
+	return info
 }
 
-// showAbout shows info about version
-func showAbout() {
+// genAbout generates info about version
+func genAbout() *usage.About {
 	about := &usage.About{
 		App:     APP,
 		Version: VER,
 		Desc:    DESC,
-		Year:    2006,
+		Year:    2009,
 		Owner:   "ESSENTIAL KAOS",
 		License: "Apache License, Version 2.0 <https://www.apache.org/licenses/LICENSE-2.0>",
 	}
 
-	about.Render()
+	return about
 }
