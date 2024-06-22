@@ -43,6 +43,9 @@ jobs:
       - name: Download dependencies
         run: make deps
 
+      - name: Build CLI
+        run: go build cmd/zabbix-jmx-get/zabbix-jmx-get.go
+
       - name: Run tests
         run: go test -covermode=count -coverprofile=cover.out
 
