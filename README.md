@@ -5,7 +5,6 @@
   <a href="https://kaos.sh/w/go-zabbix-jmx/ci"><img src="https://kaos.sh/w/go-zabbix-jmx/ci.svg" alt="GitHub Actions CI Status" /></a>
   <a href="https://kaos.sh/w/go-zabbix-jmx/codeql"><img src="https://kaos.sh/w/go-zabbix-jmx/codeql.svg" alt="GitHub Actions CodeQL Status" /></a>
   <a href="https://kaos.sh/c/go-zabbix-jmx"><img src="https://kaos.sh/c/go-zabbix-jmx.svg" alt="Coverage Status" /></a>
-  <a href="https://kaos.sh/b/go-zabbix-jmx"><img src="https://kaos.sh/b/31cf4383-04c5-4ba4-85d2-85835e41d7fc.svg" alt="Codebeat badge" /></a>
   <a href="#license"><img src=".github/images/license.svg"/></a>
 </p>
 
