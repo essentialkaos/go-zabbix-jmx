@@ -14,22 +14,9 @@ body:
 
   - type: textarea
     attributes:
-      label: Verbose application info
-      description: Output of `go-zabbix-jmx -vv` command
+      label: Module version info
+      description: Output of `grep 'github.com/essentialkaos/go-zabbix-jmx' go.sum` command
       render: shell
-    validations:
-      required: true
-
-  - type: dropdown
-    id: version
-    attributes:
-      label: Install tools
-      description: How did you install this application
-      options:
-        - From Sources
-        - RPM Package
-        - Prebuilt Binary
-      default: 0
     validations:
       required: true
 

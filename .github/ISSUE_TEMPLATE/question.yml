@@ -21,6 +21,8 @@ body:
 
   - type: textarea
     attributes:
-      label: Related version application info
-      description: Output of `go-zabbix-jmx -vv` command
+      label: Module version info
+      description: Output of `grep 'github.com/essentialkaos/go-zabbix-jmx' go.sum` command
       render: shell
+    validations:
+      required: true
