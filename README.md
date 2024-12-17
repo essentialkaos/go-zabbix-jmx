@@ -72,7 +72,7 @@ bash <(curl -fsSL https://apps.kaos.st/get) zabbix-jmx-get
 #### Usage examples
 
 ```
-$ zabbix-jmx-get -h 127.0.0.1 -p 10052 -H kfk-node1.domain.com -P 9093 'jmx.discovery[beans,"*:type=BrokerTopicMetrics,name=*"]'
+$ zabbix-jmx-get 127.0.0.1 10052 kfk-node1.domain.com 9093 'jmx.discovery[beans,"*:type=BrokerTopicMetrics,name=*"]'
 
 kafka.server BrokerTopicMetrics kafka.server:type=BrokerTopicMetrics,name=TotalProduceRequestsPerSec TotalProduceRequestsPerSec
 kafka.server BrokerTopicMetrics kafka.server:type=BrokerTopicMetrics,name=BytesOutPerSec BytesOutPerSec
@@ -87,7 +87,7 @@ kafka.server BrokerTopicMetrics kafka.server:type=BrokerTopicMetrics,name=Replic
 kafka.server BrokerTopicMetrics kafka.server:type=BrokerTopicMetrics,name=TotalFetchRequestsPerSec TotalFetchRequestsPerSec
 kafka.server BrokerTopicMetrics kafka.server:type=BrokerTopicMetrics,name=ReplicationBytesOutPerSec ReplicationBytesOutPerSec
 
-$ zabbix-jmx-get -h 127.0.0.1 -p 10052 -H kfk-node1.domain.com -P 9093 'jmx["kafka.server:type=BrokerTopicMetrics,name=BytesInPerSec",OneMinuteRate]'
+$ zabbix-jmx-get 127.0.0.1 10052 kfk-node1.domain.com 9093 'jmx["kafka.server:type=BrokerTopicMetrics,name=BytesInPerSec",OneMinuteRate]'
 
 5668479.780357378
 

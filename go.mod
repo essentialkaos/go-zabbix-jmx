@@ -1,10 +1,10 @@
 module github.com/essentialkaos/go-zabbix-jmx
 
-go 1.22
+go 1.22.8
 
 require (
 	github.com/essentialkaos/check v1.4.1
-	github.com/essentialkaos/ek/v12 v12.130.0
+	github.com/essentialkaos/ek/v13 v13.15.2
 )
 
 require (
