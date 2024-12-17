@@ -241,12 +241,6 @@ func makeRequest(serverHost string, serverPort int, keys []string) *jmx.Request 
 	return r
 }
 
-// printErrorAndExit print error message and exit with exit code 1
-func printErrorAndExit(f string, a ...interface{}) {
-	terminal.Error(f, a...)
-	os.Exit(1)
-}
-
 // ////////////////////////////////////////////////////////////////////////////////// //
 
 // printCompletion prints completion for given shell
@@ -255,11 +249,11 @@ func printCompletion() int {
 
 	switch options.GetS(OPT_COMPLETION) {
 	case "bash":
-		fmt.Printf(bash.Generate(info, APP))
+		fmt.Print(bash.Generate(info, APP))
 	case "fish":
-		fmt.Printf(fish.Generate(info, APP))
+		fmt.Print(fish.Generate(info, APP))
 	case "zsh":
-		fmt.Printf(zsh.Generate(info, optMap, APP))
+		fmt.Print(zsh.Generate(info, optMap, APP))
 	default:
 		return 1
 	}
