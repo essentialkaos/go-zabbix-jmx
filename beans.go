@@ -32,7 +32,7 @@ type jmxBeans struct {
 
 // ParseBeans parses beans data
 func ParseBeans(data string) ([]*Bean, error) {
-	data = strings.Replace(data, `\"`, `"`, -1)
+	data = strings.ReplaceAll(data, `\"`, `"`)
 
 	beans := &jmxBeans{}
 	err := json.Unmarshal([]byte(data), beans)

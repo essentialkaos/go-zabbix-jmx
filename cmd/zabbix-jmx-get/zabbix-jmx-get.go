@@ -2,7 +2,7 @@ package main
 
 // ////////////////////////////////////////////////////////////////////////////////// //
 //                                                                                    //
-//                         Copyright (c) 2023 ESSENTIAL KAOS                          //
+//                         Copyright (c) 2024 ESSENTIAL KAOS                          //
 //      Apache License, Version 2.0 <https://www.apache.org/licenses/LICENSE-2.0>     //
 //                                                                                    //
 // ////////////////////////////////////////////////////////////////////////////////// //
@@ -10,18 +10,19 @@ package main
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
-	"github.com/essentialkaos/ek/v12/fmtc"
-	"github.com/essentialkaos/ek/v12/options"
-	"github.com/essentialkaos/ek/v12/terminal"
-	"github.com/essentialkaos/ek/v12/terminal/tty"
-	"github.com/essentialkaos/ek/v12/usage"
-	"github.com/essentialkaos/ek/v12/usage/completion/bash"
-	"github.com/essentialkaos/ek/v12/usage/completion/fish"
-	"github.com/essentialkaos/ek/v12/usage/completion/zsh"
-	"github.com/essentialkaos/ek/v12/usage/man"
+	"github.com/essentialkaos/ek/v13/fmtc"
+	"github.com/essentialkaos/ek/v13/options"
+	"github.com/essentialkaos/ek/v13/terminal"
+	"github.com/essentialkaos/ek/v13/terminal/tty"
+	"github.com/essentialkaos/ek/v13/usage"
+	"github.com/essentialkaos/ek/v13/usage/completion/bash"
+	"github.com/essentialkaos/ek/v13/usage/completion/fish"
+	"github.com/essentialkaos/ek/v13/usage/completion/zsh"
+	"github.com/essentialkaos/ek/v13/usage/man"
 
 	jmx "github.com/essentialkaos/go-zabbix-jmx"
 )
@@ -30,23 +31,20 @@ import (
 
 const (
 	APP  = "zabbix-jmx-get"
-	VER  = "1.2.0"
+	VER  = "2.0.0"
 	DESC = "Tool for fetching data from Zabbix Java Gateway"
 )
 
 // ////////////////////////////////////////////////////////////////////////////////// //
 
 const (
-	OPT_GATEWAY_HOST = "h:host"
-	OPT_GATEWAY_PORT = "p:port"
-	OPT_SERVER_HOST  = "H:server-host"
-	OPT_SERVER_PORT  = "P:server-port"
-	OPT_USERNAME     = "user"
-	OPT_PASSWORD     = "password"
-	OPT_NO_COLOR     = "nc:no-color"
-	OPT_HELP         = "help"
-	OPT_VER          = "v:version"
+	OPT_USERNAME = "u:user"
+	OPT_PASSWORD = "p:password"
+	OPT_NO_COLOR = "nc:no-color"
+	OPT_HELP     = "h:help"
+	OPT_VER      = "v:version"
 
+	OPT_VERB_VER     = "vv:verbose-version"
 	OPT_COMPLETION   = "completion"
 	OPT_GENERATE_MAN = "generate-man"
 )
@@ -54,16 +52,13 @@ const (
 // ////////////////////////////////////////////////////////////////////////////////// //
 
 var optMap = options.Map{
-	OPT_GATEWAY_HOST: {Type: options.MIXED},
-	OPT_GATEWAY_PORT: {Type: options.INT, Min: 1025, Max: 65535},
-	OPT_SERVER_HOST:  {},
-	OPT_SERVER_PORT:  {Type: options.INT, Min: 1025, Max: 65535},
-	OPT_USERNAME:     {},
-	OPT_PASSWORD:     {},
-	OPT_NO_COLOR:     {Type: options.BOOL},
-	OPT_HELP:         {Type: options.BOOL},
-	OPT_VER:          {Type: options.BOOL},
+	OPT_USERNAME: {},
+	OPT_PASSWORD: {},
+	OPT_NO_COLOR: {Type: options.BOOL},
+	OPT_HELP:     {Type: options.BOOL},
+	OPT_VER:      {Type: options.BOOL},
 
+	OPT_VERB_VER:     {Type: options.BOOL},
 	OPT_COMPLETION:   {},
 	OPT_GENERATE_MAN: {Type: options.BOOL},
 }
@@ -77,7 +72,7 @@ func main() {
 
 	if !errs.IsEmpty() {
 		terminal.Error("Options parsing errors:")
-		terminal.Error(errs.String())
+		terminal.Error(errs.Error(" - "))
 		os.Exit(1)
 	}
 
@@ -92,12 +87,17 @@ func main() {
 	case options.GetB(OPT_VER):
 		genAbout().Print(options.GetS(OPT_VER))
 		os.Exit(0)
-	case options.GetB(OPT_HELP) || options.GetS(OPT_GATEWAY_HOST) == "true" || len(args) == 0:
+	case options.GetB(OPT_HELP) || len(args) < 3:
 		genUsage().Print()
 		os.Exit(0)
 	}
 
-	process(args.Strings())
+	err := process(args)
+
+	if err != nil {
+		terminal.Error(err)
+		os.Exit(1)
+	}
 }
 
 // preConfigureUI preconfigures UI based on information about user terminal
@@ -114,54 +114,74 @@ func configureUI() {
 	}
 }
 
-// validateOptions checks for required options
-func validateOptions() {
-	optionsSet := true
-
-	if !options.Has(OPT_GATEWAY_HOST) {
-		terminal.Error("Option %s is required", options.F(OPT_GATEWAY_HOST))
-		optionsSet = false
-	}
-
-	if !options.Has(OPT_GATEWAY_PORT) {
-		terminal.Error("Option %s is required", options.F(OPT_GATEWAY_PORT))
-		optionsSet = false
-	}
-
-	if !options.Has(OPT_SERVER_HOST) {
-		terminal.Error("Option %s is required", options.F(OPT_SERVER_HOST))
-		optionsSet = false
-	}
-
-	if !options.Has(OPT_SERVER_PORT) {
-		terminal.Error("Option %s is required", options.F(OPT_SERVER_PORT))
-		optionsSet = false
-	}
-
-	if !optionsSet {
-		os.Exit(1)
-	}
-}
-
 // process starts keys processing
-func process(keys []string) {
-	client, err := jmx.NewClient(options.GetS(OPT_GATEWAY_HOST) + ":" + options.GetS(OPT_GATEWAY_PORT))
+func process(args options.Arguments) error {
+	gwHost, gwPort, srvHost, srvPort, keys, err := parseArguments(args)
 
 	if err != nil {
-		printErrorAndExit(err.Error())
+		return err
+	}
+
+	client, err := jmx.NewClient(gwHost + ":" + strconv.Itoa(gwPort))
+
+	if err != nil {
+		return fmt.Errorf("Can't configure client: %v", err)
 	}
 
 	client.ConnectTimeout = 3 * time.Second
 	client.WriteTimeout = 5 * time.Second
 	client.ReadTimeout = 5 * time.Second
 
-	resp, err := client.Get(makeRequest(keys))
+	resp, err := client.Get(makeRequest(srvHost, srvPort, keys))
 
 	if err != nil {
-		printErrorAndExit(err.Error())
+		return fmt.Errorf("Can't send response: %v", err)
 	}
 
 	renderResponse(resp, keys)
+
+	return nil
+}
+
+// parseArguments parses command arguments
+func parseArguments(args options.Arguments) (string, int, string, int, []string, error) {
+	gw := args.Get(0).String()
+	gwHost, gwPort, ok := strings.Cut(gw, ":")
+
+	if !ok {
+		return "", 0, "", 0, nil, fmt.Errorf("Invalid gateway: You must specify the gateway as host:port")
+	}
+
+	gwPortInt, err := strconv.Atoi(gwPort)
+
+	if err != nil {
+		return "", 0, "", 0, nil, fmt.Errorf("Invalid gateway port: %v", err)
+	}
+
+	if gwPortInt < 1025 || gwPortInt > 65535 {
+		return "", 0, "", 0, nil, fmt.Errorf("Gateway port must be in range 1024-65535")
+	}
+
+	srv := args.Get(1).String()
+	srvHost, srvPort, ok := strings.Cut(srv, ":")
+
+	if !ok {
+		return "", 0, "", 0, nil, fmt.Errorf("Invalid server: You must specify the server as host:port")
+	}
+
+	srvPortInt, err := strconv.Atoi(srvPort)
+
+	if err != nil {
+		return "", 0, "", 0, nil, fmt.Errorf("Invalid server port: %v", err)
+	}
+
+	if srvPortInt < 1025 || srvPortInt > 65535 {
+		return "", 0, "", 0, nil, fmt.Errorf("Server port must be in range 1024-65535")
+	}
+
+	keys := args[4:].Strings()
+
+	return gwHost, gwPortInt, srvHost, srvPortInt, keys, err
 }
 
 // renderResponse renders response data
@@ -206,10 +226,10 @@ func isBeansData(keys []string, index int) bool {
 }
 
 // makeRequest creates new request
-func makeRequest(keys []string) *jmx.Request {
+func makeRequest(serverHost string, serverPort int, keys []string) *jmx.Request {
 	r := &jmx.Request{
-		Server: options.GetS(OPT_SERVER_HOST),
-		Port:   options.GetI(OPT_SERVER_PORT),
+		Server: serverHost,
+		Port:   serverPort,
 		Keys:   keys,
 	}
 
@@ -221,12 +241,6 @@ func makeRequest(keys []string) *jmx.Request {
 	return r
 }
 
-// printErrorAndExit print error message and exit with exit code 1
-func printErrorAndExit(f string, a ...interface{}) {
-	terminal.Error(f, a...)
-	os.Exit(1)
-}
-
 // ////////////////////////////////////////////////////////////////////////////////// //
 
 // printCompletion prints completion for given shell
@@ -235,11 +249,11 @@ func printCompletion() int {
 
 	switch options.GetS(OPT_COMPLETION) {
 	case "bash":
-		fmt.Printf(bash.Generate(info, APP))
+		fmt.Print(bash.Generate(info, APP))
 	case "fish":
-		fmt.Printf(fish.Generate(info, APP))
+		fmt.Print(fish.Generate(info, APP))
 	case "zsh":
-		fmt.Printf(zsh.Generate(info, optMap, APP))
+		fmt.Print(zsh.Generate(info, optMap, APP))
 	default:
 		return 1
 	}
@@ -254,12 +268,8 @@ func printMan() {
 
 // genUsage generates usage info
 func genUsage() *usage.Info {
-	info := usage.NewInfo("", "key…")
+	info := usage.NewInfo("", "gateway", "server", "key…")
 
-	info.AddOption(OPT_GATEWAY_HOST, "Java gateway host", "host")
-	info.AddOption(OPT_GATEWAY_PORT, "Java gateway port {s-}(1025-65535){!}", "port")
-	info.AddOption(OPT_SERVER_HOST, "JMX server host", "port")
-	info.AddOption(OPT_SERVER_PORT, "JMX server port {s-}(1025-65535){!}", "port")
 	info.AddOption(OPT_USERNAME, "JMX server user", "username")
 	info.AddOption(OPT_PASSWORD, "JMX server password", "password")
 	info.AddOption(OPT_NO_COLOR, "Disable colors in output")
@@ -267,12 +277,12 @@ func genUsage() *usage.Info {
 	info.AddOption(OPT_VER, "Show version")
 
 	info.AddExample(
-		`-h 127.0.0.1 -p 10052 -H srv1.domain.com -P 9093 jmx["kafka.server:type=BrokerTopicMetrics,name=BytesInPerSec",OneMinuteRate]`,
+		`127.0.0.1:10052 srv1.domain.com:9093 'jmx["kafka.server:type=BrokerTopicMetrics,name=BytesInPerSec",OneMinuteRate]'`,
 		"Request kafka metrics",
 	)
 
 	info.AddExample(
-		`-h 127.0.0.1 -p 10052 -H srv1.domain.com -P 9093 'jmx.discovery[beans,"*:type=GarbageCollector,name=*"]'`,
+		`127.0.0.1:10052 srv1.domain.com:9093 'jmx.discovery[beans,"*:type=GarbageCollector,name=*"]'`,
 		"Request discovery info",
 	)
 
